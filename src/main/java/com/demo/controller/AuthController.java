@@ -5,6 +5,9 @@ import org.springframework.http.ResponseEntity;
 import com.demo.controller.LoginController;
 import com.demo.model.User;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -16,24 +19,36 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody User user) {
         boolean success = loginController.register(user.getUsername(), user.getPassword(), user.getEmail(), user.getAge(), user.getGender());
+
+        Map<String, Object> response = new HashMap<>();
+
         if (success) {
-            return ResponseEntity.ok("Usuario registrado exitosamente");
+            response.put("message", "Usuario registrado exitosamente");
+            response.put("status", "success");
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(400).body("Error al registrar el usuario");
+            response.put("message", "Error al registrar el usuario");
+            response.put("status", "error");
+            return ResponseEntity.status(400).body(response);
         }
     }
 
-
-    // Método para hacer login
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody User user) {
         boolean success = loginController.login(user.getUsername(), user.getPassword());
+
+        Map<String, Object> response = new HashMap<>();
         if (success) {
-            return ResponseEntity.ok("Inicio de sesión exitoso");
+            response.put("status", "success");
+            response.put("message", "Inicio de sesión exitoso");
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.status(401).body("Credenciales incorrectas");
+            response.put("status", "error");
+            response.put("message", "Credenciales incorrectas");
+            return ResponseEntity.status(401).body(response);
         }
     }
+
 }
