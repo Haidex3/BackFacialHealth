@@ -22,7 +22,6 @@ public class CompaniService {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                // Se espera que haya 6 partes ahora (5 URL + 1 imagen)
                 if (parts.length == 6 && parts[0].trim().equalsIgnoreCase(name)) {
                     return new Compani(
                             parts[0].trim(),
@@ -30,7 +29,7 @@ public class CompaniService {
                             parts[2].trim(),
                             parts[3].trim(),
                             parts[4].trim(),
-                            parts[5].trim()  // Agregar el campo de imagen
+                            parts[5].trim()
                     );
                 }
             }
@@ -39,7 +38,7 @@ public class CompaniService {
             throw new IOException("Error al leer el archivo de compañías.");
         }
 
-        return null; // No match found
+        return null;
     }
 
     public void registerCompany(Compani company) throws IOException {
