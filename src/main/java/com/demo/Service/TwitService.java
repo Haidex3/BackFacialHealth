@@ -16,7 +16,7 @@ public class TwitService {
         File file = new File(FILE_PATH);
 
         if (!file.exists()) {
-            return twits; // Si el archivo no existe, devolver una lista vacía
+            return twits;
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -38,7 +38,6 @@ public class TwitService {
     public void createTwit(String username, String details) throws IOException {
         File file = new File(FILE_PATH);
 
-        // Si el archivo no existe, crearlo
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -51,7 +50,7 @@ public class TwitService {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             String record = username + "," + details;
             writer.write(record);
-            writer.newLine(); // Añadir un salto de línea después de cada tweet
+            writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
             throw new IOException("Error al escribir en el archivo de twits.");

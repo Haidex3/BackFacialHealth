@@ -1,7 +1,6 @@
 package com.demo.controller;
 
 import java.io.*;
-import java.util.*;
 
 public class LoginController {
 
@@ -48,10 +47,10 @@ public class LoginController {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                line = line.trim(); // Eliminar espacios y saltos de línea extra
+                line = line.trim();
                 String[] user = line.split(",");
                 if (user.length < 2) {
-                    continue; // Si la línea no contiene ambos campos, saltarla
+                    continue;
                 }
                 String storedUsername = user[0].trim();
                 String storedPassword = user[1].trim();
