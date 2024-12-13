@@ -36,12 +36,12 @@ public class LoginController {
     }
 
 
-    public boolean login(String username, String password) {
+    public String[] login(String username, String password) {
         File file = new File(FILE_PATH);
 
         if (!file.exists()) {
             System.out.println("No se han encontrado usuarios registrados.");
-            return false;
+            return null;
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -57,7 +57,7 @@ public class LoginController {
 
                 if (storedUsername.equals(username.trim()) && storedPassword.equals(password.trim())) {
                     System.out.println("Inicio de sesión exitoso.");
-                    return true;
+                    return user;
                 }
             }
         } catch (IOException e) {
@@ -65,10 +65,10 @@ public class LoginController {
         }
 
         System.out.println("Nombre de usuario o contraseña incorrectos.");
-        return false;
+        return null; // Retorna null si no se encuentra una coincidencia
     }
 
-    // Verificar si un usuario ya está registrado
+
     private boolean userExists(String username) {
         File file = new File(FILE_PATH);
 
