@@ -15,16 +15,16 @@ public class AuthController {
         this.loginController = new LoginController();
     }
 
-    // Método para registrar un nuevo usuario
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
-        boolean success = loginController.register(user.getUsername(), user.getPassword());
+        boolean success = loginController.register(user.getUsername(), user.getPassword(), user.getEmail(), user.getAge(), user.getGender());
         if (success) {
             return ResponseEntity.ok("Usuario registrado exitosamente");
         } else {
             return ResponseEntity.status(400).body("Error al registrar el usuario");
         }
     }
+
 
     // Método para hacer login
     @PostMapping("/login")

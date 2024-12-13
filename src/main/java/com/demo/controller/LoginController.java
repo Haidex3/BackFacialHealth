@@ -7,9 +7,9 @@ public class LoginController {
 
     private static final String FILE_PATH = "users.csv";
 
-    public boolean register(String username, String password) {
+    public boolean register(String username, String password, String email, int age, String gender) {
         File file = new File(FILE_PATH);
-        System.out.println(username + " " + password);
+        System.out.println("Username: " + username + " | Password: " + password + " | Email: " + email + " | Age: " + age + " | Gender: " + gender);
 
         if (!file.exists()) {
             try {
@@ -26,7 +26,7 @@ public class LoginController {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            writer.write(username + "," + password);  // No añadimos comillas aquí
+            writer.write(username + "," + password + "," + email + "," + age + "," + gender);
             writer.newLine();
             System.out.println("Usuario registrado con éxito.");
             return true;
@@ -35,6 +35,7 @@ public class LoginController {
             return false;
         }
     }
+
 
     public boolean login(String username, String password) {
         File file = new File(FILE_PATH);
