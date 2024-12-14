@@ -1,7 +1,6 @@
 package com.demo.controller;
 
 import java.io.*;
-import java.util.*;
 
 public class LoginController {
 
@@ -37,28 +36,28 @@ public class LoginController {
     }
 
 
-    public boolean login(String username, String password) {
+    public String[] login(String username, String password) {
         File file = new File(FILE_PATH);
 
         if (!file.exists()) {
             System.out.println("No se han encontrado usuarios registrados.");
-            return false;
+            return null;
         }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                line = line.trim(); // Eliminar espacios y saltos de línea extra
+                line = line.trim();
                 String[] user = line.split(",");
                 if (user.length < 2) {
-                    continue; // Si la línea no contiene ambos campos, saltarla
+                    continue;
                 }
                 String storedUsername = user[0].trim();
                 String storedPassword = user[1].trim();
 
                 if (storedUsername.equals(username.trim()) && storedPassword.equals(password.trim())) {
                     System.out.println("Inicio de sesión exitoso.");
-                    return true;
+                    return user;
                 }
             }
         } catch (IOException e) {
@@ -66,10 +65,10 @@ public class LoginController {
         }
 
         System.out.println("Nombre de usuario o contraseña incorrectos.");
-        return false;
+        return null; // Retorna null si no se encuentra una coincidencia
     }
 
-    // Verificar si un usuario ya está registrado
+
     private boolean userExists(String username) {
         File file = new File(FILE_PATH);
 

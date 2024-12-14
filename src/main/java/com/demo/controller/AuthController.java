@@ -37,12 +37,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody User user) {
-        boolean success = loginController.login(user.getUsername(), user.getPassword());
+        String[] userData = loginController.login(user.getUsername(), user.getPassword());
 
         Map<String, Object> response = new HashMap<>();
-        if (success) {
+        if (userData != null) {
             response.put("status", "success");
             response.put("message", "Inicio de sesión exitoso");
+            response.put("user", userData);
             return ResponseEntity.ok(response);
         } else {
             response.put("status", "error");
@@ -50,5 +51,6 @@ public class AuthController {
             return ResponseEntity.status(401).body(response);
         }
     }
+
 
 }

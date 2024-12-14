@@ -1,11 +1,8 @@
 package com.demo.Service;
 
 import com.demo.model.Twit;
-import com.opencsv.exceptions.CsvValidationException;
 import org.springframework.stereotype.Service;
 
-import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,21 +13,47 @@ public class TwitService {
 
     public List<Twit> getAllTwits() throws IOException {
         List<Twit> twits = new ArrayList<>();
-        try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
-            String[] line;
-            while ((line = reader.readNext()) != null) {
-                twits.add(new Twit(line[0], line[1]));
-            }
-        } catch (CsvValidationException e) {
-            throw new RuntimeException(e);
+        File file = new File(FILE_PATH);
+
+        if (!file.exists()) {
+            return twits;
         }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    twits.add(new Twit(parts[0].trim(), parts[1].trim()));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IOException("Error al leer el archivo de twits.");
+        }
+
         return twits;
     }
 
     public void createTwit(String username, String details) throws IOException {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(FILE_PATH, true))) {
-            String[] record = { username, details };
-            writer.writeNext(record);
+        File file = new File(FILE_PATH);
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new IOException("No se pudo crear el archivo de twits.");
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            String record = username + "," + details;
+            writer.write(record);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IOException("Error al escribir en el archivo de twits.");
         }
     }
 }
